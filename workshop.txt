@@ -11,6 +11,7 @@ description=
 description=Right clikc on any clothing to open the Transmog menu, choose the item, and bam, TRANSMOG!
 description=
 description=
+description=Compatible with all mods! Litterally all of them, Brita, AutenticZ, etc etc
 description=This mod is in beta, so, expect bugs, should work decently in MP
 description=
 description=
