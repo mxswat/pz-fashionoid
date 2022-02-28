@@ -46,6 +46,8 @@ TransmogCore.applyTransmogToPlayer = function ()
             scriptItem:setClothingItemAsset(sourceItemAsset)
         end
     end
+
+    player:resetModelNextFrame();
 end
 
 Events.OnClothingUpdated.Add(TransmogCore.applyTransmogToPlayer);
