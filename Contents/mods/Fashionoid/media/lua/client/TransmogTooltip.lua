@@ -12,7 +12,7 @@ function ISToolTipInv:render()
         item = self.item
         getPlayer()
         local transmogItem = TransmogCore.getItemTransmog(item)
-        if item and instanceof(item, "Clothing") and transmogItem ~= nil then
+        if item and TransmogCore.canBeTransmogged(item) and transmogItem ~= nil then
             numRows = 1
 			transmogText = "Transmog to "..transmogItem:getDisplayName()
 		else

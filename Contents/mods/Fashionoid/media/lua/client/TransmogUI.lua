@@ -50,7 +50,7 @@ function ISTransmogListViewer:initList()
         --The following code is used to generate a list of all items in the game
         --in a format that allows for easier conversion into an excel / google sheets
 
-        if not item:getObsolete() and not item:isHidden() and item:getTypeString() == 'Clothing' then
+        if not item:getObsolete() and not item:isHidden() and TransmogCore.canBeTransmogged(item) then
             if not self.module[item:getModuleName()] then
                 self.module[item:getModuleName()] = {}
                 table.insert(moduleNames, item:getModuleName())

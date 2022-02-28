@@ -10,7 +10,7 @@ ISInventoryPaneContextMenu.createMenu = function(player, isInPlayerInventory, it
         if not instanceof(v, "InventoryItem") then
             testItem = v.items[1];
         end
-		if testItem:getCategory() == "Clothing" then
+        if TransmogCore.canBeTransmogged(testItem) then
             clothing = testItem;
         end
     end
