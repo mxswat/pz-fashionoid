@@ -33,7 +33,9 @@ TransmogCore.getItemTransmog = function (item)
     local transmogTable = playerdata.transmogTable or {};
 
     local fullName = item:getScriptItem():getFullName()
-    return ScriptManager.instance:getItem(transmogTable[fullName])
+
+    local transmogFullName = transmogTable[fullName] 
+    return transmogFullName and ScriptManager.instance:getItem(transmogTable[fullName]) or nil
 end
 
 TransmogCore.applyTransmogToItem = function (itemToUse)
@@ -60,7 +62,7 @@ TransmogCore.applyTransmogToPlayer = function ()
         if item ~= nil and TransmogCore.canBeTransmogged(item)and transmogTable[item:getScriptItem():getFullName()] ~= nil then
             local scriptItem = item:getScriptItem()
             local sourceItemName = transmogTable[item:getScriptItem():getFullName()]
-            print(scriptItem:getFullName()..'has to be transmogged into'..transmogTable[scriptItem:getFullName()])
+            print(scriptItem:getFullName()..' has to be transmogged into'..transmogTable[scriptItem:getFullName()])
 
             local sourceItem = ScriptManager.instance:getItem(sourceItemName)
             local sourceItemAsset = sourceItem:getClothingItemAsset()
