@@ -16,17 +16,16 @@ ISInventoryPaneContextMenu.createMenu = function(player, isInPlayerInventory, it
     end
     
     if tostring(#items) == "1" and clothing then
-        local option = context:addOption("Transmog", items, ISTransmogListViewer.OnOpenPanel, player);
+        local option = context:addOption("Transmog Menu");
+        local subMenu = context:getNew(context);
+        context:addSubMenu(option, subMenu);
+        context = subMenu;
+
+        local option_transmog = context:addOption("Transmogrify", items, ISTransmogListViewer.OnOpenPanel, player);
+        local option_reset = context:addOption("Reset", testItem, TransmogCore.resetItemTransmog);
+
         TransmogCore.setItemToTransmog(testItem)
 	end
     
     return context
 end
-
--- local old_ISInventoryPaneContextMenu_doWearClothingTooltip = ISInventoryPaneContextMenu.doWearClothingTooltip
--- ISInventoryPaneContextMenu.doWearClothingTooltip = function(playerObj, newItem, currentItem, option)
---     local result = old_ISInventoryPaneContextMenu_doWearClothingTooltip
---     local toolTip = option.toolTip
-    
---     return result
--- end
