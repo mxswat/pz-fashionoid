@@ -75,17 +75,19 @@ TransmogCore.applyTransmogToPlayer = function ()
     for i = 0, inv:getItems():size() - 1 do
         local itmToTransmog = inv:getItems():get(i);
         if itmToTransmog ~= nil and TransmogCore.canBeTransmogged(itmToTransmog)and transmogTable[itmToTransmog:getScriptItem():getFullName()] ~= nil then
-            local itmToTransmogScriptItem = itmToTransmog:getScriptItem()
+            local itmToTrnsmgScriptItem = itmToTransmog:getScriptItem()
             local itmToTransmogFullName = itmToTransmog:getScriptItem():getFullName()
             local trnsmgSourceItemFullName = transmogTable[itmToTransmog:getScriptItem():getFullName()]
 
-            print(itmToTransmogScriptItem:getFullName()..' is transmogged into '..transmogTable[itmToTransmogScriptItem:getFullName()])
+            print(itmToTrnsmgScriptItem:getFullName()..' is transmogged into '..transmogTable[itmToTrnsmgScriptItem:getFullName()])
+
+            local itmToTrnsmgClothingItemAsset = itmToTrnsmgScriptItem:getClothingItemAsset()
 
             local trnsmgSourceScriptItem = ScriptManager.instance:getItem(trnsmgSourceItemFullName)
             local trnsmgSourceClothingItemAsset = trnsmgSourceScriptItem:getClothingItemAsset()
 
-            TransmogCore.addClothingItemAssetsBackup(itmToTransmogFullName, trnsmgSourceClothingItemAsset)
-            itmToTransmogScriptItem:setClothingItemAsset(trnsmgSourceClothingItemAsset)
+            TransmogCore.addClothingItemAssetsBackup(itmToTransmogFullName, itmToTrnsmgClothingItemAsset)
+            itmToTrnsmgScriptItem:setClothingItemAsset(trnsmgSourceClothingItemAsset)
         end
     end
 
