@@ -3,13 +3,22 @@ TransmogCore = {
     clothingItemAssetsBackup = {}
 }
 
+TransmogCore.isBannedItem = function (item)
+    local fullName = item.getScriptItem and item:getScriptItem():getFullName() or item:getFullName()
+    return fullName == "Base.KeyRing"
+end
+
 TransmogCore.canBeTransmogged = function (item)
+    if TransmogCore.isBannedItem(item) then
+        return false
+    end
+
     if item.getScriptItem then
         if item:getCategory() == "Clothing" then
             return true
         end
     
-        if instanceof(item, "InventoryContainer") and item:getBodyLocation() then
+        if instanceof(item, "InventoryContainer") and item:getBodyLocation()  then
             return true
         end
     else
@@ -17,10 +26,9 @@ TransmogCore.canBeTransmogged = function (item)
         -- local displayCategory = item:getDisplayCategory()
         local isClothing = typeString == 'Clothing'
         local isBackpack = typeString == "Container" and item:getBodyLocation()
-        if isClothing or isBackpack then
+        if isClothing or isBackpack and not item:getFullName() ~= "Base.KeyRing" then
             return true
         end
-
     end
 end
 
@@ -77,7 +85,7 @@ TransmogCore.applyTransmogToPlayer = function ()
         local donorFullName = transmogTable[receiverFullName]
 
         if receiverItem ~= nil and canBeTransmogged and donorFullName ~= nil then
-            print(receiverFullName..' has to be transmogged into'..donorFullName)
+            print(receiverFullName..' has to be transmogged into '..donorFullName)
             local receiverClothingAsset = receiverItem:getScriptItem():getClothingItemAsset()
             TransmogCore.addClothingItemAssetsBackup(receiverFullName, receiverClothingAsset)
             local donorScriptItem = ScriptManager.instance:getItem(donorFullName)
@@ -109,6 +117,11 @@ TransmogCore.resetItemTransmog = function (receiverItem)
         TransmogCore.applyTransmogToItem(nil)
         receiverScriptItem:setClothingItemAsset(TransmogCore.getClothingItemAssetsBackup(receiverFullName))
     end
+end
+
+TransmogCore.hideItem = function ()
+    local keyRingScriptItem = ScriptManager.instance:getItem("Base.Belt2")
+    TransmogCore.applyTransmogToItem(keyRingScriptItem)
 end
 
 Events.OnClothingUpdated.Add(TransmogCore.applyTransmogToPlayer);
