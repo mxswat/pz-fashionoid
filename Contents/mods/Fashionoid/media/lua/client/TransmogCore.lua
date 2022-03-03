@@ -3,7 +3,6 @@ TransmogCore = {
     clothingItemAssetsBackup = {}
 }
 
--- Argument is a (Script)Item or an InventoryItem
 TransmogCore.canBeTransmogged = function (item)
     if item.getScriptItem then
         if item:getCategory() == "Clothing" then
@@ -21,22 +20,8 @@ TransmogCore.canBeTransmogged = function (item)
         if isClothing or isBackpack then
             return true
         end
+
     end
-end
-
-TransmogCore.getLocalPlayerTransmogTable = function ()
-    local player = getPlayer();
-    local playerdata = player:getModData();
-    local transmogTable = playerdata.transmogTable or {};
-
-    return transmogTable
-end
-
-TransmogCore.setItemToLocalPlayerTransmogTable = function (toTrnsmogName, srcTrnsmogName)
-    local player = getPlayer();
-    local playerdata = player:getModData();
-    local transmogTable = playerdata.transmogTable or {};
-    transmogTable[toTrnsmogName] = srcTrnsmogName
 end
 
 TransmogCore.setItemToTransmog = function (item)
@@ -44,11 +29,17 @@ TransmogCore.setItemToTransmog = function (item)
 end
 
 TransmogCore.getItemToTransmog = function (item)
-    return TransmogCore.itemToTransmog
+    return TransmogCore.itemToTransmog;
+end
+
+TransmogCore.getTransmogTable = function ()
+    local player = getPlayer();
+    local playerdata = player:getModData();
+    return playerdata.transmogTable or {};
 end
 
 TransmogCore.getItemTransmog = function (item)
-    local transmogTable = TransmogCore.getLocalPlayerTransmogTable()
+    local transmogTable = TransmogCore.getTransmogTable()
 
     local fullName = item:getScriptItem():getFullName()
 
@@ -56,66 +47,68 @@ TransmogCore.getItemTransmog = function (item)
     return transmogFullName and ScriptManager.instance:getItem(transmogTable[fullName]) or nil
 end
 
-TransmogCore.applyTransmogToItem = function (itemToUse)
+TransmogCore.applyTransmogToItem = function (_itemToUse)
     local player = getPlayer();
-    local itemToTransmogScriptItem = TransmogCore.getItemToTransmog():getScriptItem()
+    local itemToTransmog = TransmogCore.getItemToTransmog()
+    local itemToTransmogScriptItem = itemToTransmog:getScriptItem()
 
-    TransmogCore.setItemToLocalPlayerTransmogTable(itemToTransmogScriptItem:getFullName(), itemToUse:getFullName())
+    -- Checking for nil, since I can pass nil to invalidate the transmog table for the cached item
+    local donorFullName = _itemToUse ~= nil and _itemToUse:getFullName() or nil;
+    
+    local playerdata = player:getModData();
+    local transmogTable = TransmogCore.getTransmogTable()
+    transmogTable[itemToTransmogScriptItem:getFullName()] = donorFullName
+    playerdata.transmogTable = transmogTable;
 
     player:resetModelNextFrame();
     triggerEvent("OnClothingUpdated", player);
 end
 
 TransmogCore.applyTransmogToPlayer = function ()
+    local transmogTable = TransmogCore.getTransmogTable()
     local player = getPlayer();
-    
-    local transmogTable = TransmogCore.getLocalPlayerTransmogTable()
-    
+
     local inv = player:getInventory();
     for i = 0, inv:getItems():size() - 1 do
-        local itmToTransmog = inv:getItems():get(i);
-        if itmToTransmog ~= nil and TransmogCore.canBeTransmogged(itmToTransmog)and transmogTable[itmToTransmog:getScriptItem():getFullName()] ~= nil then
-            local itmToTrnsmgScriptItem = itmToTransmog:getScriptItem()
-            local itmToTransmogFullName = itmToTransmog:getScriptItem():getFullName()
-            local trnsmgSourceItemFullName = transmogTable[itmToTransmog:getScriptItem():getFullName()]
+        local receiverItem = inv:getItems():get(i);
+        local receiverScriptItem = receiverItem:getScriptItem()
+        local receiverFullName = receiverScriptItem:getFullName()
+        local canBeTransmogged = TransmogCore.canBeTransmogged(receiverItem)
+        local donorFullName = transmogTable[receiverFullName]
 
-            print(itmToTrnsmgScriptItem:getFullName()..' is transmogged into '..transmogTable[itmToTrnsmgScriptItem:getFullName()])
-
-            local itmToTrnsmgClothingItemAsset = itmToTrnsmgScriptItem:getClothingItemAsset()
-
-            local trnsmgSourceScriptItem = ScriptManager.instance:getItem(trnsmgSourceItemFullName)
-            local trnsmgSourceClothingItemAsset = trnsmgSourceScriptItem:getClothingItemAsset()
-
-            TransmogCore.addClothingItemAssetsBackup(itmToTransmogFullName, itmToTrnsmgClothingItemAsset)
-            itmToTrnsmgScriptItem:setClothingItemAsset(trnsmgSourceClothingItemAsset)
+        if receiverItem ~= nil and canBeTransmogged and donorFullName ~= nil then
+            print(receiverFullName..' has to be transmogged into'..donorFullName)
+            local receiverClothingAsset = receiverItem:getScriptItem():getClothingItemAsset()
+            TransmogCore.addClothingItemAssetsBackup(receiverFullName, receiverClothingAsset)
+            local donorScriptItem = ScriptManager.instance:getItem(donorFullName)
+            local donorClothingItemAsset = donorScriptItem:getClothingItemAsset()
+            receiverScriptItem:setClothingItemAsset(donorClothingItemAsset)
         end
     end
 
     player:resetModelNextFrame();
 end
 
-TransmogCore.addClothingItemAssetsBackup = function (fuLLName, clothingItemAsset)
-    if TransmogCore.clothingItemAssetsBackup[fuLLName] then
+TransmogCore.addClothingItemAssetsBackup = function (receiverFullName, receiverClothingItemAsset)
+    if TransmogCore.clothingItemAssetsBackup[receiverFullName] ~= nil then
         return
     end
-    TransmogCore.clothingItemAssetsBackup[fuLLName] = clothingItemAsset
+    TransmogCore.clothingItemAssetsBackup[receiverFullName] = receiverClothingItemAsset
 end
 
 TransmogCore.getClothingItemAssetsBackup = function (fuLLName)
     return TransmogCore.clothingItemAssetsBackup[fuLLName]
 end
 
-TransmogCore.resetItemTransmog = function (itemToReset)
-    local player = getPlayer();
-    local itemToResetFullName = itemToReset:getScriptItem():getFullName()
-    local itemToResetScriptItem = TransmogCore.getItemToTransmog():getScriptItem()
-    local clothingItemAssetBackup = TransmogCore.getClothingItemAssetsBackup(itemToResetFullName)
-
-    TransmogCore.setItemToLocalPlayerTransmogTable(itemToResetFullName, nil)
-
-    itemToResetScriptItem:setClothingItemAsset(clothingItemAssetBackup)
-
-    player:resetModelNextFrame();
+TransmogCore.resetItemTransmog = function (receiverItem)
+    local transmogTable = TransmogCore.getTransmogTable()
+    local receiverScriptItem = receiverItem:getScriptItem()
+    local receiverFullName = receiverScriptItem:getFullName()
+    local donorFullName = transmogTable[receiverFullName]
+    if donorFullName ~= nil then
+        TransmogCore.applyTransmogToItem(nil)
+        receiverScriptItem:setClothingItemAsset(TransmogCore.getClothingItemAssetsBackup(receiverFullName))
+    end
 end
 
 Events.OnClothingUpdated.Add(TransmogCore.applyTransmogToPlayer);
