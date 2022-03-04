@@ -24,8 +24,9 @@ ISInventoryPaneContextMenu.createMenu = function(player, isInPlayerInventory, it
         local option_transmog = context:addOption("Transmogrify", items, ISTransmogListViewer.OnOpenPanel, player);
         local option_reset = context:addOption("Reset", testItem, TransmogCore.resetItemTransmog);
         local option_hide = context:addOption("Hide", testItem, TransmogCore.hideItem);
+        local clothingItem = clothing:getClothingItem()
 
-        if clothing:getClothingItem():getAllowRandomTint() then
+        if clothingItem:getAllowRandomTint() then
             local function changeItemColor(color)
                 print('color-picked: '..tostring(color))
                 testItem:getVisual():setTint(color)
@@ -40,6 +41,22 @@ ISInventoryPaneContextMenu.createMenu = function(player, isInPlayerInventory, it
             end);
         end
 
+        local function changeTexture(i)
+            testItem:getVisual():setTextureChoice(i)
+            TransmogCore.resetPlayerModelNextFrame()
+        end
+
+        local textureOption = context:addOption("Change Texture");
+        local texturesSubMenu = context:getNew(context);
+        context:addSubMenu(textureOption, texturesSubMenu);
+        context = texturesSubMenu;
+        local textureChoices = clothingItem:hasModel() and clothingItem:getTextureChoices() or clothingItem:getBaseTextures()
+	    if textureChoices and (textureChoices:size() > 1) then
+            for i=0,textureChoices:size() - 1 do
+                local text = getText("UI_ClothingTextureType", i + 1)
+                context:addOption(text, i, changeTexture);
+            end
+        end
         TransmogCore.setItemToTransmog(testItem)
 	end
     
