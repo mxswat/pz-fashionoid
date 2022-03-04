@@ -124,5 +124,10 @@ TransmogCore.hideItem = function ()
     TransmogCore.applyTransmogToItem(keyRingScriptItem)
 end
 
+TransmogCore.resetPlayerModelNextFrame = function ()
+    local player = getPlayer();
+    player:resetModelNextFrame();
+end
+
 Events.OnClothingUpdated.Add(TransmogCore.applyTransmogToPlayer);
 Events.OnGameStart.Add(TransmogCore.applyTransmogToPlayer);

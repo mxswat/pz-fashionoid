@@ -15,6 +15,7 @@ description=[h1]How to use[/h1]
 description=Right-click on any clothing to open the Transmog (Transmogrification) menu, choose and double click the item you wish to visually change your current item to, and bam, TRANSMOG!
 description=Now it's also possible to Transmog (Transmogrify) Backpacks, Belt's, Fanny Packs, and webbing sets and similar containers (like Brita webbing sets, ammo pouches etc...)
 description=To reset just click the reset button
+description=To hide an item use the hide button
 description=
 description=
 description=Compatible with all mods! Literally all of them, Brita, AutenticZ, etc etc.
