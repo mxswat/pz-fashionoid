@@ -51,10 +51,16 @@ ISColorPickerModal = ISTextBox:derive("ISColorPickerModal");
 function ISColorPickerModal:initialise()
     ISTextBox.initialise(self);
 
-    self.colorBtn:setVisible(true);
+    local inset = 2
+    local height = inset + self.fontHgt * self.numLines + inset
+    self:removeChild(self.colorBtn);
+    self.colorBtn = ISButton:new(self.entry.x + self.entry.width + 5, self.entry.y, height, height, "", self, ISColorPickerModal.onColorPicker);
     self.colorBtn:setX(self.entry:getX());
     self.colorBtn:setWidth(self.entry:getWidth());
-    self.colorBtn.onmousedown = ISColorPickerModal.onColorPicker
+    self.colorBtn:initialise();
+    self.colorBtn.backgroundColor = {r = 1, g = 1, b = 1, a = 1};
+    self:addChild(self.colorBtn);
+    self.colorBtn:setVisible(true);
     self.entry:setVisible(false);
 end
 
