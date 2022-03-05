@@ -46,12 +46,12 @@ ISInventoryPaneContextMenu.createMenu = function(player, isInPlayerInventory, it
             TransmogCore.resetPlayerModelNextFrame()
         end
 
-        local textureOption = context:addOption("Change Texture");
-        local texturesSubMenu = context:getNew(context);
-        context:addSubMenu(textureOption, texturesSubMenu);
-        context = texturesSubMenu;
         local textureChoices = clothingItem:hasModel() and clothingItem:getTextureChoices() or clothingItem:getBaseTextures()
 	    if textureChoices and (textureChoices:size() > 1) then
+            local textureOption = context:addOption("Change Texture");
+            local texturesSubMenu = context:getNew(context);
+            context:addSubMenu(textureOption, texturesSubMenu);
+            context = texturesSubMenu;
             for i=0,textureChoices:size() - 1 do
                 local text = getText("UI_ClothingTextureType", i + 1)
                 context:addOption(text, i, changeTexture);
