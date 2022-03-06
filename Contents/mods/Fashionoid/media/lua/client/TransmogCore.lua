@@ -129,5 +129,15 @@ TransmogCore.resetPlayerModelNextFrame = function ()
     player:resetModelNextFrame();
 end
 
+TransmogCore.changeTexture = function (i)
+    TransmogCore.getItemToTransmog():getVisual():setTextureChoice(i)
+    TransmogCore.resetPlayerModelNextFrame()
+end
+
+TransmogCore.changeItemColor = function (color)
+    TransmogCore.getItemToTransmog():getVisual():setTint(color)
+    TransmogCore.resetPlayerModelNextFrame()
+end
+
 Events.OnClothingUpdated.Add(TransmogCore.applyTransmogToPlayer);
 Events.OnGameStart.Add(TransmogCore.applyTransmogToPlayer);

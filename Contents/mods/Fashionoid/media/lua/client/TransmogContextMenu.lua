@@ -27,23 +27,12 @@ ISInventoryPaneContextMenu.createMenu = function(player, isInPlayerInventory, it
         local clothingItem = clothing:getClothingItem()
 
         if clothingItem:getAllowRandomTint() then
-            local function changeItemColor(color)
-                print('color-picked: '..tostring(color))
-                testItem:getVisual():setTint(color)
-                TransmogCore.resetPlayerModelNextFrame()
-            end
-
             local option_color = context:addOption("Change Color", testItem, function ()
                 local modal = ISColorPickerModal:new(0, 0, 280, 180, "Change color of "..testItem:getDisplayName(), 'None');
                 modal:initialise();
                 modal:addToUIManager();
-                modal:setOnPickedColorCallback(changeItemColor)
+                modal:setOnPickedColorCallback(TransmogCore.changeItemColor)
             end);
-        end
-
-        local function changeTexture(i)
-            testItem:getVisual():setTextureChoice(i)
-            TransmogCore.resetPlayerModelNextFrame()
         end
 
         local textureChoices = clothingItem:hasModel() and clothingItem:getTextureChoices() or clothingItem:getBaseTextures()
@@ -54,7 +43,7 @@ ISInventoryPaneContextMenu.createMenu = function(player, isInPlayerInventory, it
             context = texturesSubMenu;
             for i=0,textureChoices:size() - 1 do
                 local text = getText("UI_ClothingTextureType", i + 1)
-                context:addOption(text, i, changeTexture);
+                context:addOption(text, i, TransmogCore.changeTexture);
             end
         end
         TransmogCore.setItemToTransmog(testItem)
@@ -79,6 +68,9 @@ function ISColorPickerModal:initialise()
     self:addChild(self.colorBtn);
     self.colorBtn:setVisible(true);
     self.entry:setVisible(false);
+
+    self.yes:setTitle("Close")
+    self:removeChild(self.no);
 end
 
 function ISColorPickerModal:setOnPickedColorCallback(functionCallback)
