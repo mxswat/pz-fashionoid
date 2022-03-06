@@ -1,7 +1,7 @@
-TransmogCore = {
-    itemToTransmog = nil,
-    clothingItemAssetsBackup = {}
-}
+TransmogCore = TransmogCore or {}
+TransmogCore.itemToTransmog = nil
+TransmogCore.clothingItemAssetsBackup = {}
+TransmogCore.immersiveMode = TransmogCore.immersiveMode or false
 
 TransmogCore.isBannedItem = function (item)
     local fullName = item.getScriptItem and item:getScriptItem():getFullName() or item:getFullName()
@@ -26,10 +26,22 @@ TransmogCore.canBeTransmogged = function (item)
         -- local displayCategory = item:getDisplayCategory()
         local isClothing = typeString == 'Clothing'
         local isBackpack = typeString == "Container" and item:getBodyLocation()
-        if isClothing or isBackpack and not item:getFullName() ~= "Base.KeyRing" then
+        if isClothing or isBackpack then
             return true
         end
     end
+end
+
+TransmogCore.isImmersiveMode = function ()
+    return TransmogCore.immersiveMode
+end
+
+TransmogCore.immersiveModeFilter = function (fullName)
+    local player = getPlayer();
+    local playerdata = player:getModData();
+    local transmogItemsMap = playerdata.transmogItemsMap or {}
+
+    return transmogItemsMap[fullName] == true
 end
 
 TransmogCore.setItemToTransmog = function (item)

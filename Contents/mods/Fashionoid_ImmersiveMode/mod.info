@@ -1,0 +1,5 @@
+name=Fashionoid - Immersive Mode
+id=Fashionoid_ImmersiveMode
+description=Fashionoid but you can transmog into only items you have found
+poster=poster.png
+require=Fashionoid
