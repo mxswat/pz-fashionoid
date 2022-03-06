@@ -1,5 +1,5 @@
 name=Fashionoid - Immersive Mode
 id=Fashionoid_ImmersiveMode
-description=Fashionoid but you can transmog into only items you have found
+description=Fashionoid but when you enable the Immersive Mode you can transmog into *only* items you have found, and if you die, well, you have to look for the items again
 poster=poster.png
 require=Fashionoid
