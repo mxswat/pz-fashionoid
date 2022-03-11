@@ -14,21 +14,16 @@ TransmogCore.canBeTransmogged = function (item)
     end
 
     if item.getScriptItem then
-        if item:getCategory() == "Clothing" then
-            return true
-        end
-    
-        if instanceof(item, "InventoryContainer") and item:getBodyLocation()  then
-            return true
-        end
-    else
-        local typeString = item:getTypeString() 
-        -- local displayCategory = item:getDisplayCategory()
-        local isClothing = typeString == 'Clothing'
-        local isBackpack = typeString == "Container" and item:getBodyLocation()
-        if isClothing or isBackpack then
-            return true
-        end
+        item = item:getScriptItem()
+    end
+
+    local typeString = item:getTypeString() 
+    local isClothing = typeString == 'Clothing'
+    local isBackpack = typeString == "Container" and item:getBodyLocation()
+    -- if it has no clothingItemAsset there is no point in trasmoging it since it will not be transmogged anyway
+    local clothingItemAsset = item:getClothingItemAsset()
+    if (isClothing or isBackpack) and clothingItemAsset ~= nil then
+        return true
     end
 end
 
@@ -69,15 +64,15 @@ end
 
 TransmogCore.applyTransmogToItem = function (_itemToUse)
     local player = getPlayer();
-    local itemToTransmog = TransmogCore.getItemToTransmog()
-    local itemToTransmogScriptItem = itemToTransmog:getScriptItem()
+    local receiverItem = TransmogCore.getItemToTransmog()
+    local receiverScriptItem = receiverItem:getScriptItem()
 
-    -- Checking for nil, since I can pass nil to invalidate the transmog table for the cached item
+    -- Checking for nil, since I can pass nil to invalidate the transmog table for the cached item when resetting an item
     local donorFullName = _itemToUse ~= nil and _itemToUse:getFullName() or nil;
-    
+
     local playerdata = player:getModData();
     local transmogTable = TransmogCore.getTransmogTable()
-    transmogTable[itemToTransmogScriptItem:getFullName()] = donorFullName
+    transmogTable[receiverScriptItem:getFullName()] = donorFullName
     playerdata.transmogTable = transmogTable;
 
     player:resetModelNextFrame();
