@@ -10,8 +10,9 @@ function ISInventoryPane:refreshContainer()
     local transmogItemsMap = playerdata.transmogItemsMap or {}
     
     for _, v in pairs(self.itemindex) do
-        if v ~= nil and v.items[1]:getCategory() == "Clothing" then
-            transmogItemsMap[v.items[1]:getScriptItem():getFullName()] = true
+        local item = v.items[1]
+        if v ~= nil and TransmogCore.canBeTransmogged(item) then
+            transmogItemsMap[item:getScriptItem():getFullName()] = true
         end
     end
     
