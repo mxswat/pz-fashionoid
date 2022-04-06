@@ -146,5 +146,13 @@ TransmogCore.changeItemColor = function (color)
     TransmogCore.resetPlayerModelNextFrame()
 end
 
+TransmogCore.resetTransmogTable = function ()
+    local player = getPlayer();
+    local playerdata = player:getModData();
+    playerdata.transmogTable = {};
+    player:resetModelNextFrame();
+    TransmogCore.clothingItemAssetsBackup = {}
+end
+
 Events.OnClothingUpdated.Add(TransmogCore.applyTransmogToPlayer);
 Events.OnGameStart.Add(TransmogCore.applyTransmogToPlayer);
