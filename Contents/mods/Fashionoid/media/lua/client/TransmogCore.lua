@@ -43,7 +43,7 @@ TransmogCore.setItemToTransmog = function (item)
     TransmogCore.itemToTransmog = item;
 end
 
-TransmogCore.getItemToTransmog = function (item)
+TransmogCore.getItemToTransmog = function ()
     return TransmogCore.itemToTransmog;
 end
 
@@ -134,6 +134,7 @@ end
 TransmogCore.resetPlayerModelNextFrame = function ()
     local player = getPlayer();
     player:resetModelNextFrame();
+    sendVisual(player)
 end
 
 TransmogCore.changeTexture = function (i)

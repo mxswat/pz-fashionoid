@@ -19,25 +19,25 @@ function ISColorPickerModal:initialise()
     self:removeChild(self.no);
 end
 
-function ISColorPickerModal:setOnPickedColorCallback(functionCallback)
-    self.onPickedColorCallback = functionCallback
+function ISColorPickerModal:setOnSelectionCallback(functionCallback)
+    self.onSelectionCallback = functionCallback
 end
 
 function ISColorPickerModal:onColorPicker(button)
     self.colorPicker:setX(getMouseX() - 100);
     self.colorPicker:setY(getMouseY() - 20);
-    self.colorPicker.pickedFunc = ISColorPickerModal.onPickedColor;
+    self.colorPicker.pickedFunc = ISColorPickerModal.OnSelection;
     self.colorPicker:setVisible(true);
     self.colorPicker:bringToTop();
 end
 
-function ISColorPickerModal:onPickedColor(color, mouseUp)
+function ISColorPickerModal:OnSelection(color, mouseUp)
     self.currentColor = ColorInfo.new(color.r, color.g, color.b,1);
     self.colorBtn.backgroundColor = {r = color.r, g = color.g, b = color.b, a = 1};
     self.entry.javaObject:setTextColor(self.currentColor);
     self.colorPicker:setVisible(false);
-    if self.onPickedColorCallback ~= nil then
+    if self.onSelectionCallback ~= nil then
         local color = Color.new(color.r, color.g, color.b,1);
-        self.onPickedColorCallback(ImmutableColor.new(color))
+        self.onSelectionCallback(ImmutableColor.new(color))
     end
 end

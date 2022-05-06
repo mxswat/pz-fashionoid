@@ -29,7 +29,7 @@ ISInventoryPaneContextMenu.createMenu = function(player, isInPlayerInventory, it
 
         local textureChoices = clothingItem:hasModel() and clothingItem:getTextureChoices() or clothingItem:getBaseTextures()
 	    if textureChoices and (textureChoices:size() > 1) then
-            ISInventoryPaneContextMenu.addTextureChangeContextMenu(subMenuContext, textureChoices)
+            ISInventoryPaneContextMenu.addTextureChangeContextMenu(subMenuContext, clothing)
         end
         TransmogCore.setItemToTransmog(clothing)
 	end
@@ -48,16 +48,15 @@ ISInventoryPaneContextMenu.addColorChangeContextMenu = function (context, testIt
         local modal = ISColorPickerModal:new(0, 0, 280, 180, "Change color of "..testItem:getDisplayName(), 'None');
         modal:initialise();
         modal:addToUIManager();
-        modal:setOnPickedColorCallback(TransmogCore.changeItemColor)
+        modal:setOnSelectionCallback(TransmogCore.changeItemColor)
     end);
 end
 
-ISInventoryPaneContextMenu.addTextureChangeContextMenu = function (context, textureChoices)
-    local textureOption = context:addOption("Change Texture");
-    local texturesSubMenu = context:getNew(context);
-    context:addSubMenu(textureOption, texturesSubMenu);
-    for i=0, textureChoices:size() - 1 do
-        local text = getText("UI_ClothingTextureType", i + 1)
-        texturesSubMenu:addOption(text, i, TransmogCore.changeTexture);
-    end
+ISInventoryPaneContextMenu.addTextureChangeContextMenu = function (context, testItem)
+    local option_texture = context:addOption("Change Texture", testItem, function ()
+        local modal = ISTexturePickerModal:new(0, 0, 280, 180, "Change Texture of "..testItem:getDisplayName(), 'None');
+        modal:initialise();
+        modal:addToUIManager();
+        modal:setOnSelectionCallback(TransmogCore.changeTexture)
+    end);
 end
