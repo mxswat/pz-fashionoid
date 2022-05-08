@@ -20,7 +20,7 @@ end
 
 
 function ISTexturePickerModal:onSelectTexture()
-    print(self.textureSelect.selected -1 )
+    -- print(self.textureSelect.selected -1 )
     self.onSelectionCallback(self.textureSelect.selected - 1)
 end
 -- ISComboBox
