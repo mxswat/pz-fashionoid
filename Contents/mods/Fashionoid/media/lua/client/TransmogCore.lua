@@ -101,24 +101,18 @@ TransmogCore.applyTransmogToItem = function (_itemToUse)
     local spawnedItem = player:getInventory():AddItem(_itemToUse:getFullName())
 
     -- BloodLocation
-    spawnedItem:setTemperature(_itemToUse:getTemperature());
-    spawnedItem:setInsulation(_itemToUse:getInsulation());
-    spawnedItem:setConditionLowerChance(_itemToUse:getConditionLowerChance());
-    spawnedItem:setStompPower(_itemToUse:getStompPower());
-    spawnedItem:setRunSpeedModifier(_itemToUse:getRunSpeedModifier());
-    spawnedItem:setCombatSpeedModifier(_itemToUse:getCombatSpeedModifier());
-    spawnedItem:setRemoveOnBroken(_itemToUse:getRemoveOnBroken());
-    spawnedItem:setCanHaveHoles(_itemToUse:getCanHaveHoles());
-    spawnedItem:setWeightWet(_itemToUse:getWeightWet());
-    spawnedItem:setBiteDefense(_itemToUse:getBiteDefense());
-    spawnedItem:setBulletDefense(_itemToUse:getBulletDefense());
-    spawnedItem:setNeckProtectionModifier(_itemToUse:getNeckProtectionModifier());
-    spawnedItem:setScratchDefense(_itemToUse:getScratchDefense());
-    spawnedItem:setChanceToFall(_itemToUse:getChanceToFall());
-    spawnedItem:setWindresistance(_itemToUse:getWindresistance());
-    spawnedItem:setWaterResistance(_itemToUse:getWaterResistance());
-    spawnedItem:setAlarmSound(_itemToUse:getAlarmSound());
-    spawnedItem:setSoundRadius(_itemToUse:getSoundRadius());
+    print('--------------paramsToCheck----------------')
+    for _, param in ipairs(paramsToCheck) do
+        local getParam = "get"..param;
+        local setParam = "set"..param;
+        if _itemToUse[getParam] then
+            local itemG = _itemToUse;
+            local value = loadstring("return itemG:"..getParam.."()")()
+            print(getParam..':'..tostring(value));
+
+            -- loadstring("spawnedItem:"..setParam.."(...)")(value)
+        end
+    end
 
     player:resetModelNextFrame();
     triggerEvent("OnClothingUpdated", player);
