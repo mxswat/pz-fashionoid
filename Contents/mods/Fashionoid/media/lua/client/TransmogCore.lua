@@ -77,6 +77,10 @@ TransmogCore.applyTransmogToItem = function (_itemToUse)
 
     -- NEW CODE HERE
 
+    local spawnedItem = player:getInventory():AddItem(_itemToUse:getFullName())
+
+    spawnedItem:setScratchDefense(99)
+
     local paramsToCheck = {
         "Temperature",
         "Insulation",
@@ -95,22 +99,19 @@ TransmogCore.applyTransmogToItem = function (_itemToUse)
         "Windresistance",
         "WaterResistance",
         "AlarmSound",
-        "SoundRadius",
+        "BloodClothingType"
+        -- "SoundRadius",
     }
-
-    local spawnedItem = player:getInventory():AddItem(_itemToUse:getFullName())
 
     -- BloodLocation
     print('--------------paramsToCheck----------------')
     for _, param in ipairs(paramsToCheck) do
         local getParam = "get"..param;
         local setParam = "set"..param;
-        if _itemToUse[getParam] then
-            local itemG = _itemToUse;
-            local value = loadstring("return itemG:"..getParam.."()")()
-            print(getParam..':'..tostring(value));
-
-            -- loadstring("spawnedItem:"..setParam.."(...)")(value)
+        if receiverItem[getParam] then
+            local value = receiverItem[getParam](receiverItem);
+            print(getParam..":"..tostring(value));
+            spawnedItem[setParam](spawnedItem, value);
         end
     end
 
