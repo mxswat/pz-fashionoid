@@ -75,6 +75,51 @@ TransmogCore.applyTransmogToItem = function (_itemToUse)
     transmogTable[receiverScriptItem:getFullName()] = donorFullName
     playerdata.transmogTable = transmogTable;
 
+    -- NEW CODE HERE
+
+    local paramsToCheck = {
+        "Temperature",
+        "Insulation",
+        "ConditionLowerChance",
+        "StompPower",
+        "RunSpeedModifier",
+        "CombatSpeedModifier",
+        "RemoveOnBroken",
+        "CanHaveHoles",
+        "WeightWet",
+        "BiteDefense",
+        "BulletDefense",
+        "NeckProtectionModifier",
+        "ScratchDefense",
+        "ChanceToFall",
+        "Windresistance",
+        "WaterResistance",
+        "AlarmSound",
+        "SoundRadius",
+    }
+
+    local spawnedItem = player:getInventory():AddItem(_itemToUse:getFullName())
+
+    -- BloodLocation
+    spawnedItem:setTemperature(_itemToUse:getTemperature());
+    spawnedItem:setInsulation(_itemToUse:getInsulation());
+    spawnedItem:setConditionLowerChance(_itemToUse:getConditionLowerChance());
+    spawnedItem:setStompPower(_itemToUse:getStompPower());
+    spawnedItem:setRunSpeedModifier(_itemToUse:getRunSpeedModifier());
+    spawnedItem:setCombatSpeedModifier(_itemToUse:getCombatSpeedModifier());
+    spawnedItem:setRemoveOnBroken(_itemToUse:getRemoveOnBroken());
+    spawnedItem:setCanHaveHoles(_itemToUse:getCanHaveHoles());
+    spawnedItem:setWeightWet(_itemToUse:getWeightWet());
+    spawnedItem:setBiteDefense(_itemToUse:getBiteDefense());
+    spawnedItem:setBulletDefense(_itemToUse:getBulletDefense());
+    spawnedItem:setNeckProtectionModifier(_itemToUse:getNeckProtectionModifier());
+    spawnedItem:setScratchDefense(_itemToUse:getScratchDefense());
+    spawnedItem:setChanceToFall(_itemToUse:getChanceToFall());
+    spawnedItem:setWindresistance(_itemToUse:getWindresistance());
+    spawnedItem:setWaterResistance(_itemToUse:getWaterResistance());
+    spawnedItem:setAlarmSound(_itemToUse:getAlarmSound());
+    spawnedItem:setSoundRadius(_itemToUse:getSoundRadius());
+
     player:resetModelNextFrame();
     triggerEvent("OnClothingUpdated", player);
 end
