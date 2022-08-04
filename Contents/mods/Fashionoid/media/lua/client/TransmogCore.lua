@@ -115,6 +115,11 @@ TransmogCore.applyTransmogToItem = function (_itemToUse)
         end
     end
 
+    -- createNewScriptItem -- BROKEN FROM HERE
+    local a = cloneItemType(receiverScriptItem:getFullName()..'_Transmogged', receiverScriptItem:getFullName())
+    -- a:setClothingItemAsset(_itemToUse:getScriptItem():getClothingItemAsset())
+    spawnedItem:setScriptItem(a)
+        
     player:resetModelNextFrame();
     triggerEvent("OnClothingUpdated", player);
 end
