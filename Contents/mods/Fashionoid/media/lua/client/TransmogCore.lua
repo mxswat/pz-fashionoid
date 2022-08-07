@@ -78,9 +78,6 @@ TransmogCore.applyTransmogToItem = function (_itemToUse)
     -- NEW CODE HERE
 
     local spawnedItem = player:getInventory():AddItem(_itemToUse:getFullName())
-
-    spawnedItem:setScratchDefense(99)
-
     local paramsToCheck = {
         "Temperature",
         "Insulation",
@@ -97,10 +94,7 @@ TransmogCore.applyTransmogToItem = function (_itemToUse)
         "ScratchDefense",
         "ChanceToFall",
         "Windresistance",
-        "WaterResistance",
-        "AlarmSound",
-        "BloodClothingType"
-        -- "SoundRadius",
+        "ScriptItem",
     }
 
     -- BloodLocation
@@ -115,13 +109,11 @@ TransmogCore.applyTransmogToItem = function (_itemToUse)
         end
     end
 
-    -- createNewScriptItem -- BROKEN FROM HERE
-    local a = cloneItemType(receiverScriptItem:getFullName()..'_Transmogged', receiverScriptItem:getFullName())
-    -- a:setClothingItemAsset(_itemToUse:getScriptItem():getClothingItemAsset())
-    spawnedItem:setScriptItem(a)
-        
-    player:resetModelNextFrame();
-    triggerEvent("OnClothingUpdated", player);
+    -- spawnedItem:setScriptItem(_itemToUse:getScriptItem())
+
+    sendVisual(player);
+    triggerEvent("OnClothingUpdated", player)
+    player:resetModel();
 end
 
 TransmogCore.applyTransmogToPlayer = function ()
