@@ -5,7 +5,7 @@ ISTransmogListViewer = ISItemsListViewer:derive("ISTransmogListViewer");
 local FONT_HGT_SMALL = getTextManager():getFontHeight(UIFont.Small)
 
 function ISTransmogListViewer:initialise()
-    ISPanel.initialise(self);
+    ISItemsListViewer.initialise(self); -- I Must fix this on main branch
     local btnWid = 100
     local btnHgt = math.max(25, FONT_HGT_SMALL + 3 * 2)
     local padBottom = 10

@@ -95,6 +95,8 @@ TransmogCore.applyTransmogToItem = function (_itemToUse)
         "ChanceToFall",
         "Windresistance",
         "ScriptItem",
+        "BloodClothingType",
+        "BodyLocation", -- <- This crashes the game
     }
 
     -- BloodLocation
